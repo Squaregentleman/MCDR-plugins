@@ -5,8 +5,8 @@ import os
 import requests
 import json
 import time
-sys.path.append('..')
-import blivedm
+#sys.path.append('..')
+#import blivedm
 import asyncio
 
 startblh = []
