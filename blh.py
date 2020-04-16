@@ -19,7 +19,6 @@ helpmsg ='''§4------577-B站弹幕插件------
 §6!!blh start [ID] -启动弹幕姬
 §6!!blh stop [ID] -停止弹幕姬
 §6!!blh stop-all -停止全部房间弹幕姬
-§6!!blh wadd [ID] -添加管理员白名单
 §4-------------------------'''
 
 def on_load(server, old):
