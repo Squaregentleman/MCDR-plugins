@@ -16,8 +16,8 @@ ConfigFilePath = ConfigFileFolder + 'AutoCleaner.json'
 HelpMessage = '''
 §7------------§bMCD ClearItem§7------------
 一个扫地机插件(在白名单中物品可以避免被删除)
-§7''' + Prefix + ''' help §r 显示帮助信息
 §7''' + Prefix + ''' §r清理物品
+§7''' + Prefix + ''' help §r 显示帮助信息
 §7''' + Prefix + ''' whitelist add <物品> §r添加<物品>进入白名单
 §7''' + Prefix + ''' whitelist remove <物品> §r从白名单中删除<物品>
 §7''' + Prefix + ''' whitelist list §r显示白名单中已有的物品'''
@@ -44,6 +44,7 @@ def on_death_message(server, death_message):
         pass
     else:
         die = death_split[0] + ' ' + str(round(time.time() * 1000))
+        server.say('[§2扫地§r] §4警告 ' + death_split[0] + ' 死亡 5 Min 内无法扫地!')
                
     
 def on_info(server ,info):
@@ -78,8 +79,9 @@ def on_info(server ,info):
     elif len(command) == 0:
         if die != '':
             tick = die.split(' ') # 分割空格
-            me = time.time() - int(tick[1]) # 当前时间 - 死亡时间
-            if me <= 300000: # 判断时间是否小于300000毫秒
+            me = int(round(time.time() * 1000)) - int(tick[1]) # 当前时间 - 死亡时间
+            # server.say(str(me))
+            if me <= 300000: # 判断时间是否大于300000毫秒
                 server.say('[§2扫地§r] §4警告 5 Min 内 ' + tick[0] + ' 死亡,操作被阻止!')
                 server.tell(tick[0], '[§2扫地§r] ' + info.player + ' §4请求扫地! 请确保装备捡完,输入 ' + Prefix + ' yes 同意,拒绝不用管.')
                 pass
@@ -113,9 +115,10 @@ def on_info(server ,info):
             server.tell(info.player, '没有人死亡!')
 
     #测试
-    # elif len(command) == 1 and command[0] == 'w':
-    #     die = info.player + ' ' + str(round(time.time() * 1000)) # 写入测试变量
-
+    elif len(command) == 1 and command[0] == 'w':
+        die = info.player + ' ' + str(round(time.time() * 1000)) # 写入测试变量
+    elif len(command) == 2 and command[0] == 'w':
+        die = info.player + ' ' + command[1] # 写入测试变量
 
     #白名单相关
     elif len(command) in [2,3] and command[0] == 'whitelist':
