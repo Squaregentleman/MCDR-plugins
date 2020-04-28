@@ -81,7 +81,7 @@ def on_info(server ,info):
             tick = die.split(' ') # 分割空格
             me = int(round(time.time() * 1000)) - int(tick[1]) # 当前时间 - 死亡时间
             # server.say(str(me))
-            if me <= 300000: # 判断时间是否大于300000毫秒
+            if me <= 300000: # 判断时间是否小于300000毫秒
                 server.say('[§2扫地§r] §4警告 5 Min 内 ' + tick[0] + ' 死亡,操作被阻止!')
                 server.tell(tick[0], '[§2扫地§r] ' + info.player + ' §4请求扫地! 请确保装备捡完,输入 ' + Prefix + ' yes 同意,拒绝不用管.')
                 pass
@@ -115,10 +115,10 @@ def on_info(server ,info):
             server.tell(info.player, '没有人死亡!')
 
     #测试
-    elif len(command) == 1 and command[0] == 'w':
-        die = info.player + ' ' + str(round(time.time() * 1000)) # 写入测试变量
-    elif len(command) == 2 and command[0] == 'w':
-        die = info.player + ' ' + command[1] # 写入测试变量
+    # elif len(command) == 1 and command[0] == 'w':
+        # die = info.player + ' ' + str(round(time.time() * 1000)) # 写入测试变量
+    # elif len(command) == 2 and command[0] == 'w':
+        # die = info.player + ' ' + command[1] # 写入测试变量
 
     #白名单相关
     elif len(command) in [2,3] and command[0] == 'whitelist':
