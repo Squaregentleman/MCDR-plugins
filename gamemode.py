@@ -61,3 +61,5 @@ def on_info(server, info):
 
 def on_load(server, old):
     server.add_help_message('!!gm', '切换玩家模式')
+    if not os.path.exists(logfile):
+      os.makedirs(logfile)
