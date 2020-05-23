@@ -8,13 +8,6 @@ def on_player_joined(server, player):
   if os.path.exists('./plugins/gm/' + player):
     server.execute("gamemode spectator " + player)
 
-def getPlayerInfo(server, name):
-	if hasattr(server, 'MCDR'):
-		api = server.get_plugin_instance('PlayerInfoAPI')
-	else:
-		api = load_source('PlayerInfoAPI', './plugins/PlayerInfoAPI.py')
-	return api.getPlayerInfo(server, name)
-
 def on_load(server, old):
     server.add_help_message('!!gm', '切换玩家模式')
     server.add_help_message('!!gm [ID]', '管理员强制切换切换玩家模式(限制权限admin)')
@@ -22,7 +15,8 @@ def on_load(server, old):
       os.makedirs('./plugins/gm/')
 
 def on_info(server, info):
-  dimension_convert = {"0":"overworld","-1":"the_nether","1":"the_end"}
+  PlayerInfoAPI = server.get_plugin_instance('PlayerInfoAPI')
+  dimension_convert = {"0":"overworld","-1":"the_nether","1":"the_end","minecraft:overworld":"overworld","minecraft:the_nether":"the_nether","minecraft:the_end":"the_end"}
   per = server.get_permission_level(info)
   if info.content.startswith('!!gm') and info.is_player == 1:
     if per >= 1:
@@ -44,9 +38,10 @@ def on_info(server, info):
             server.tell(gm[1], '§6正在更改模式，请不要走动!')
             time.sleep(1)
             os.system('cd plugins/gm && echo " " > ' + gm[1])
-            player_info = getPlayerInfo(server, gm[1])
+            pos = PlayerInfoAPI.getPlayerInfo(server, info.player, path='Pos')
+            dim = PlayerInfoAPI.getPlayerInfo(server, info.player, path='Dimension')
             f = open('./plugins/gm/' + gm[1], 'w')
-            f.write(str(player_info['Pos'][0])+'|'+str(player_info['Pos'][1])+'|'+str(player_info['Pos'][2])+'|'+dimension_convert[str(player_info['Dimension'])])
+            f.write(str(pos[0])+'|'+str(pos[1])+'|'+str(pos[2])+'|'+dimension_convert[str(dim)])
             f.close()
             server.execute("gamemode spectator " + gm[1])
             server.tell(gm[1], '§6已切换到观察者模式,要切换回来请!!gm')
@@ -67,9 +62,10 @@ def on_info(server, info):
         server.tell(info.player, '§6正在更改模式，请不要走动!')
         time.sleep(1)
         os.system('cd plugins/gm && echo " " > ' + info.player)
-        player_info = getPlayerInfo(server, info.player)
+        pos = PlayerInfoAPI.getPlayerInfo(server, info.player, path='Pos')
+        dim = PlayerInfoAPI.getPlayerInfo(server, info.player, path='Dimension')
         f = open('./plugins/gm/' + info.player, 'w')
-        f.write(str(player_info['Pos'][0])+'|'+str(player_info['Pos'][1])+'|'+str(player_info['Pos'][2])+'|'+dimension_convert[str(player_info['Dimension'])])
+        f.write(str(pos[0])+'|'+str(pos[1])+'|'+str(pos[2])+'|'+dimension_convert[str(dim)])
         f.close()
         server.execute("gamemode spectator " + info.player)
         server.tell(info.player, '§6已切换到观察者模式,要切换回来请!!gm')
